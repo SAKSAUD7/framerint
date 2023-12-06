@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenSea API Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .asset {
+            border: 1px solid #ddd;
+            padding: 10px;
+            width: 200px;
+        }
+        .asset img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+<h1>OpenSea NFT Gallery</h1>
+
+<div id="gallery"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const apiKey = '87e86ede6bcc4ee8ac2467a6158f8295';
+        const apiUrl = 'https://opensea.io/collection/the-meta-key/analytics'; // Replace with the appropriate OpenSea API endpoint
+
+        fetch(`${apiUrl}?order_direction=desc&offset=0&limit=100`, {
+            headers: {
+                'X-API-KEY': apiKey,
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            const galleryElement = document.getElementById('gallery');
+
+            data.assets.forEach(asset => {
+                const assetElement = document.createElement('div');
+                assetElement.className = 'asset';
+
+                const imageElement = document.createElement('img');
+                imageElement.src = asset.image_url;
+                imageElement.alt = asset.name;
+
+                const nameElement = document.createElement('p');
+                nameElement.textContent = asset.name;
+
+                assetElement.appendChild(imageElement);
+                assetElement.appendChild(nameElement);
+
+                galleryElement.appendChild(assetElement);
+            });
+        })
+        .catch(error => console.error('Error:', error));
+    });
+</script>
+
+</body>
+</html>
